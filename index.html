@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insight Scorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9f8f6;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px 24px 80px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .divider {
+      width: 100%;
+      max-width: 640px;
+      height: 1px;
+      background: #e0ddd8;
+      margin-bottom: 40px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1a1a1a;
+      background: #fff;
+      border: 1.5px solid #e0ddd8;
+      border-radius: 6px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    textarea:focus {
+      border-color: #aaa;
+    }
+
+    textarea::placeholder {
+      color: #bbb;
+    }
+
+    button#score-btn {
+      margin-top: 16px;
+      padding: 12px 28px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      background: #1a1a1a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    button#score-btn:hover { opacity: 0.82; }
+    button#score-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #results {
+      margin-top: 48px;
+      display: none;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .score-number {
+      font-size: 56px;
+      font-weight: 600;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .score-number.pass  { color: #1a1a1a; }
+    .score-number.fail  { color: #c0392b; }
+
+    .score-label {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .verdict {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .verdict.pass { color: #2d6a4f; }
+    .verdict.sharpen { color: #1a1a1a; }
+    .verdict.fail { color: #c0392b; }
+
+    .flags-header {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #444;
+      margin-bottom: 16px;
+    }
+
+    .flag-item {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 4px 12px;
+      margin-bottom: 20px;
+      align-items: start;
+    }
+
+    .flag-icon {
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .flag-criterion {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .flag-reason {
+      grid-column: 2;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin-top: 2px;
+    }
+
+    .retry-btn {
+      margin-top: 32px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #888;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .retry-btn:hover { color: #1a1a1a; }
+
+    .loading-dot {
+      display: inline-block;
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Insight Scorer</h1>
+    <p>Paste your insight below. 80 or above is a pass.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <main>
+    <label for="insight-input">Your insight</label>
+    <textarea
+      id="insight-input"
+      placeholder="E.g. Users abandon the form because they're being asked to share sensitive information before they understand who will see it."
+    ></textarea>
+    <button id="score-btn" onclick="scoreInsight()">Score it</button>
+
+    <div id="results">
+      <div class="score-row">
+        <span class="score-number" id="score-display">--</span>
+        <span class="score-label">/ 100</span>
+      </div>
+      <div class="verdict" id="verdict-text"></div>
+
+      <div id="flags-section">
+        <div class="flags-header">What's missing</div>
+        <div id="flags-list"></div>
+      </div>
+
+      <button class="retry-btn" onclick="reset()">Score another</button>
+    </div>
+  </main>
+
+  <script>
+    const CRITERIA = [
+      {
+        id: "non_obvious",
+        name: "Non-obvious truth",
+        weight: 20,
+        test: function(text) {
+          var obvious = [
+            /users (don'?t|do not|aren'?t|are not) (use|like|complete|read|click|open|finish|fill)/i,
+            /people (don'?t|do not|aren'?t|are not) (use|like|have|want|know)/i,
+            /\bis (too|very|really|quite) (long|short|slow|fast|hard|complex|simple|confusing)/i,
+            /^users (want|need|prefer)/i,
+            /^people (want|need|prefer)/i
+          ];
+          var isObvious = obvious.some(function(r) { return r.test(text); });
+          var hasDepth = text.split(' ').length > 12;
+          return { pass: !isObvious && hasDepth, note: "Reads like a surface-level observation rather than a non-obvious truth." };
+        }
+      },
+      {
+        id: "explains_why",
+        name: "Explains why",
+        weight: 25,
+        test: function(text) {
+          var whyWords = /\b(because|since|due to|as a result of|stems from|driven by|rooted in|leads to|causes|means that|results in|explains why|which is why|that is why|this is because)\b/i;
+          return { pass: whyWords.test(text), note: "Doesn't explain the underlying 'why'. An insight needs to state a reason, not just describe what happens." };
+        }
+      },
+      {
+        id: "human_motivation",
+        name: "Reveals human motivation",
+        weight: 25,
+        test: function(text) {
+          var motivationWords = /\b(fear|trust|shame|pride|control|anxiety|comfort|belonging|safety|uncertainty|embarrassment|status|identity|belief|feel|felt|worry|hope|want|desire|need|afraid|confident|vulnerable|insecure|expect|perceive|assume|think that|believe that|don't know|unsure|unclear|confused|distrust|suspicious|reluctant|hesitant)\b/i;
+          return { pass: motivationWords.test(text), note: "Doesn't surface a human motivation, emotion, or belief. Insights reveal what's going on inside people's heads." };
+        }
+      },
+      {
+        id: "reframes",
+        name: "Reframes the problem",
+        weight: 15,
+        test: function(text) {
+          var reframeWords = /\b(not (about|just|simply|merely)|actually|really|the real|the true|underlying|really (about|means)|rather than|instead of|shift|reframe|changes how|what they (really|actually)|the issue (is|isn't))\b/i;
+          var longEnough = text.split(' ').length > 18;
+          return { pass: reframeWords.test(text) || longEnough, note: "Doesn't clearly reframe the problem. A strong insight changes how you'd think about or approach the challenge." };
+        }
+      },
+      {
+        id: "actionable",
+        name: "Points to action",
+        weight: 15,
+        test: function(text) {
+          var actionWords = /\b(means|suggests|points to|calls for|requires|should|could|this shifts|this changes|opportunity|response|design|build|create|reduce|increase|improve|focus on|rather than|instead|which means|so the|the solution|the answer|we (should|need|must|could))\b/i;
+          return { pass: actionWords.test(text), note: "It's not clear what this insight would change about your approach or decision." };
+        }
+      }
+    ];
+
+    function scoreInsight() {
+      var input = document.getElementById('insight-input').value.trim();
+      if (!input) return;
+
+      var btn = document.getElementById('score-btn');
+      btn.disabled = true;
+      btn.innerHTML = 'Scoring<span class="loading-dot">...</span>';
+
+      setTimeout(function() {
+        var results = CRITERIA.map(function(c) {
+          var result = c.test(input);
+          return { name: c.name, weight: c.weight, passed: result.pass, note: result.note };
+        });
+
+        var score = results.reduce(function(sum, r) { return sum + (r.passed ? r.weight : 0); }, 0);
+        var failed = results.filter(function(r) { return !r.passed; });
+
+        renderResults(score, failed);
+        btn.disabled = false;
+        btn.textContent = 'Score it';
+      }, 500);
+    }
+
+    function renderResults(score, failed) {
+      var resultsEl = document.getElementById('results');
+      var scoreEl = document.getElementById('score-display');
+      var verdictEl = document.getElementById('verdict-text');
+      var flagsList = document.getElementById('flags-list');
+      var flagsSection = document.getElementById('flags-section');
+
+      var pass = score >= 80;
+      var perfect = score === 100;
+
+      scoreEl.textContent = score;
+      scoreEl.className = 'score-number ' + (pass ? 'pass' : 'fail');
+
+      if (perfect) {
+        verdictEl.textContent = 'Passes. Solid insight.';
+        verdictEl.className = 'verdict pass';
+      } else if (pass) {
+        verdictEl.textContent = 'Passes. Here\'s how to sharpen it further.';
+        verdictEl.className = 'verdict sharpen';
+      } else {
+        verdictEl.textContent = 'Not quite yet. Here\'s what\'s holding it back.';
+        verdictEl.className = 'verdict fail';
+      }
+
+      flagsList.innerHTML = '';
+
+      if (failed.length === 0) {
+        flagsSection.style.display = 'none';
+      } else {
+        var isSuggestion = pass;
+        document.querySelector('.flags-header').textContent = isSuggestion ? 'To sharpen it' : 'What\'s missing';
+        flagsSection.style.display = 'block';
+        failed.forEach(function(f) {
+          var item = document.createElement('div');
+          item.className = 'flag-item';
+          var iconColor = isSuggestion ? '#b07d2a' : '#c0392b';
+          item.innerHTML =
+            '<svg class="flag-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<circle cx="9" cy="9" r="8" stroke="' + iconColor + '" stroke-width="1.4"/>' +
+              '<line x1="9" y1="5.5" x2="9" y2="10" stroke="' + iconColor + '" stroke-width="1.6" stroke-linecap="round"/>' +
+              '<circle cx="9" cy="12.5" r="0.9" fill="' + iconColor + '"/>' +
+            '</svg>' +
+            '<span class="flag-criterion">' + f.name + '</span>' +
+            '<span class="flag-reason">' + f.note + '</span>';
+          flagsList.appendChild(item);
+        });
+      }
+
+      resultsEl.style.display = 'block';
+      resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function reset() {
+      document.getElementById('insight-input').value = '';
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('insight-input').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('insight-input').addEventListener('keydown', function(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') scoreInsight();
+    });
+  </script>
+
+</body>
+</html>
