@@ -256,7 +256,15 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #2d6a4f;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+    }
+
+    .rewrite-warning {
+      font-size: 11px;
+      font-weight: 600;
+      color: #b33927;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
 
     .rewrite-text {
@@ -351,7 +359,8 @@
       </div>
 
       <div class="rewrite-block" id="rewrite-section">
-        <div class="rewrite-title">How this could look as a 90+ insight</div>
+        <div class="rewrite-title">How this could look</div>
+        <div class="rewrite-warning">Notice: For reference only. Do not copy or submit verbatim — copying will invalidate your review.</div>
         <div class="rewrite-text" id="rewrite-text"></div>
       </div>
 
@@ -380,7 +389,7 @@
 
       const btn = document.getElementById('score-btn');
       btn.disabled = true;
-      btn.innerHTML = 'Evaluating with AI<span class="loading-dot">...</span>';
+      btn.innerHTML = 'Evaluating<span class="loading-dot">...</span>';
 
       try {
         const response = await fetch('/api/score', {
