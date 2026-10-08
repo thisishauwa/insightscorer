@@ -1,0 +1,9 @@
+{
+  "name": "insight-scorer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Insight scoring tool for product and design teams",
+  "scripts": {
+    "start": "npx vercel dev"
+  }
+}

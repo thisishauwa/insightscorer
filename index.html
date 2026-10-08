@@ -17,52 +17,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 48px 24px 80px;
-    }
-
-    .top-bar {
-      width: 100%;
-      max-width: 640px;
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 24px;
-    }
-
-    .key-status-btn {
-      background: none;
-      border: none;
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      color: #777;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 4px;
-      transition: all 0.15s;
-    }
-
-    .key-status-btn:hover {
-      background: #eeece8;
-      color: #1a1a1a;
-    }
-
-    .key-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #c0392b;
-    }
-
-    .key-dot.connected {
-      background: #2d6a4f;
+      padding: 64px 24px 80px;
     }
 
     header {
       width: 100%;
       max-width: 640px;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
 
     header h1 {
@@ -102,70 +63,6 @@
       max-width: 640px;
     }
 
-    /* Key Config Drawer */
-    #key-drawer {
-      display: none;
-      background: #fff;
-      border: 1px solid #e0ddd8;
-      border-radius: 6px;
-      padding: 18px 20px;
-      margin-bottom: 28px;
-    }
-
-    #key-drawer.open {
-      display: block;
-    }
-
-    .drawer-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 4px;
-    }
-
-    .drawer-desc {
-      font-size: 12px;
-      color: #666;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-
-    .key-input-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .key-input-row input {
-      flex: 1;
-      padding: 9px 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-    }
-
-    .key-input-row input:focus {
-      border-color: #888;
-    }
-
-    .key-input-row button {
-      padding: 9px 16px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      background: #1a1a1a;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .key-input-row button:hover {
-      opacity: 0.85;
-    }
-
-    /* Input area */
     label {
       display: block;
       font-size: 12px;
@@ -237,6 +134,18 @@
       color: #1a1a1a;
     }
 
+    .error-banner {
+      display: none;
+      background: #fdf2f2;
+      border: 1px solid #f5c2c2;
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #c0392b;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
     /* Results */
     #results {
       margin-top: 48px;
@@ -276,7 +185,7 @@
     .verdict.sharpen { color: #1a1a1a; }
     .verdict.fail { color: #c0392b; }
 
-    /* Pillars Breakdown */
+    /* Pillars */
     .section-title {
       font-size: 12px;
       font-weight: 600;
@@ -323,7 +232,7 @@
       line-height: 1.5;
     }
 
-    /* Feedback list */
+    /* Feedback */
     .flags-block {
       margin-bottom: 28px;
     }
@@ -357,7 +266,7 @@
       margin-top: 2px;
     }
 
-    /* Rewrite Box */
+    /* Rewrite */
     .rewrite-block {
       background: #fff;
       border: 1px solid #e0ddd8;
@@ -380,18 +289,6 @@
       line-height: 1.6;
       color: #1a1a1a;
       font-style: italic;
-    }
-
-    .error-banner {
-      display: none;
-      background: #fdf2f2;
-      border: 1px solid #f5c2c2;
-      border-radius: 4px;
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #c0392b;
-      margin-top: 14px;
-      line-height: 1.5;
     }
 
     .retry-btn {
@@ -421,38 +318,19 @@
 </head>
 <body>
 
-  <div class="top-bar">
-    <button class="key-status-btn" onclick="toggleKeyDrawer()">
-      <span class="key-dot" id="key-dot"></span>
-      <span id="key-status-text">API Key Needed</span>
-    </button>
-  </div>
-
   <header>
     <h1>Insight Scorer</h1>
     <p>Paste your insight below. Evaluated against the team framework. 80 or above is a pass.</p>
-    <div class="framework-pill">Framework: The What (25) &rarr; The Why (35) &rarr; Actionable Consequence (40)</div>
+    <div class="framework-pill">The What (25) &rarr; The Why (35) &rarr; Actionable Consequence (40)</div>
   </header>
 
   <div class="divider"></div>
 
   <main>
-    <!-- Key Drawer -->
-    <div id="key-drawer">
-      <div class="drawer-title">AI Evaluator API Key</div>
-      <div class="drawer-desc">
-        Drop your Google Gemini API key (from Google AI Studio) or OpenAI key below. It stays saved securely in your browser's local storage.
-      </div>
-      <div class="key-input-row">
-        <input type="password" id="api-key-input" placeholder="Paste Gemini (AIza...) or OpenAI (sk-...) key">
-        <button onclick="saveApiKey()">Save Key</button>
-      </div>
-    </div>
-
     <label for="insight-input">Your insight</label>
     <textarea
       id="insight-input"
-      placeholder="E.g. Users abandon the checkout form because they are asked to share phone numbers before knowing why it's needed, shifting our mandate to clarify privacy upfront rather than removing form fields."
+      placeholder="E.g. Users abandon the checkout form because they are asked to share phone numbers before knowing why it's needed, shifting our mandate toward establishing trust upfront rather than simply shortening the form."
     ></textarea>
 
     <div class="button-group">
@@ -509,82 +387,9 @@
   </main>
 
   <script>
-    const SYSTEM_PROMPT = `You are an expert insight judge for a product and design team.
-Evaluate the user's submitted insight against this exact standard:
-
-DEFINITION:
-"An insight is a non-obvious truth that explains why people behave the way they do—and changes how we understand or solve a problem. It reveals the underlying human motivation, and births actionable consequences."
-
-RUBRIC (100 Points Total):
-1. The What: Non-Obvious Truth vs. Surface Observation (25 Points)
-   - Is this an underlying truth, or merely a surface-level observation ("Users don't complete the form", "Users click button X")?
-   - Max 10 points if it is merely an observation.
-
-2. The Why: Underlying Human Motivation & Tension (35 Points)
-   - Does it reveal what is happening inside people's heads (fears, anxiety, loss of trust, perceived vulnerability, mental models)?
-   - PENALIZE BUZZWORD STUFFING: If someone just inserts words like "because of lack of trust" without explaining the actual psychological friction, deduct points heavily.
-
-3. The Actionable Consequence: What It Births (40 Points)
-   - Does this insight birth a clear, concrete consequence or decision for the product, team, or strategy?
-   - NOTE: It is NOT enough to say "this changes our approach" or "we should rethink things". It must articulate what concrete consequence or mandate is birthed from the insight.
-
-SCORING POLICY:
-- 80+ is a PASS.
-- 90+ is an EXCELLENT PASS.
-- Below 80 is a FAIL. Be rigorous. Do not give 100 unless it is truly exceptional across all 3 criteria.
-
-OUTPUT FORMAT:
-Respond with ONLY valid JSON with this exact schema:
-{
-  "total_score": number, // 0-100
-  "verdict": string, // One-line summary
-  "pillars": {
-    "what": { "score": number, "max": 25, "note": string },
-    "why": { "score": number, "max": 35, "note": string },
-    "consequence": { "score": number, "max": 40, "note": string }
-  },
-  "feedback_items": [
-    { "title": string, "detail": string }
-  ],
-  "sharpened_rewrite": string // A clear, rewritten version of their draft demonstrating how to elevate it to a 90+ insight.
-}`;
-
-    // Key management
-    function getStoredKey() {
-      return localStorage.getItem('insight_scorer_api_key') || '';
-    }
-
-    function updateKeyUI() {
-      const key = getStoredKey();
-      const dot = document.getElementById('key-dot');
-      const text = document.getElementById('key-status-text');
-      const input = document.getElementById('api-key-input');
-      
-      if (key) {
-        dot.className = 'key-dot connected';
-        text.textContent = 'API Key Configured ✓';
-        input.value = key;
-      } else {
-        dot.className = 'key-dot';
-        text.textContent = 'Drop API Key';
-      }
-    }
-
-    function toggleKeyDrawer() {
-      const drawer = document.getElementById('key-drawer');
-      drawer.classList.toggle('open');
-    }
-
-    function saveApiKey() {
-      const key = document.getElementById('api-key-input').value.trim();
-      if (!key) {
-        localStorage.removeItem('insight_scorer_api_key');
-      } else {
-        localStorage.setItem('insight_scorer_api_key', key);
-      }
-      updateKeyUI();
-      document.getElementById('key-drawer').classList.remove('open');
-      hideError();
+    function loadExample() {
+      document.getElementById('insight-input').value = 
+        "Users abandon the form because they're being asked to share sensitive information before they understand who will see it—shifting our mandate toward establishing trust upfront rather than simply shortening the form.";
     }
 
     function showError(msg) {
@@ -597,74 +402,6 @@ Respond with ONLY valid JSON with this exact schema:
       document.getElementById('error-banner').style.display = 'none';
     }
 
-    function loadExample() {
-      document.getElementById('insight-input').value = 
-        "Users abandon the form because they're being asked to share sensitive information before they understand who will see it—shifting our mandate toward establishing trust upfront rather than simply shortening the form.";
-    }
-
-    async function evaluateWithGemini(key, text) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
-      const payload = {
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: SYSTEM_PROMPT + "\n\nDraft Insight to Evaluate:\n\"" + text + "\"" }
-            ]
-          }
-        ],
-        generationConfig: {
-          responseMimeType: "application/json"
-        }
-      };
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        throw new Error(errJson.error?.message || `Gemini API error: ${res.status} ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!rawText) throw new Error("No response received from Gemini.");
-      return JSON.parse(rawText);
-    }
-
-    async function evaluateWithOpenAI(key, text) {
-      const url = 'https://api.openai.com/v1/chat/completions';
-      const payload = {
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: 'Draft Insight to Evaluate:\n"' + text + '"' }
-        ],
-        response_format: { type: 'json_object' }
-      };
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}));
-        throw new Error(errJson.error?.message || `OpenAI API error: ${res.status}`);
-      }
-
-      const data = await res.json();
-      const rawText = data.choices?.[0]?.message?.content;
-      return JSON.parse(rawText);
-    }
-
     async function scoreInsight() {
       hideError();
       const input = document.getElementById('insight-input').value.trim();
@@ -673,28 +410,26 @@ Respond with ONLY valid JSON with this exact schema:
         return;
       }
 
-      const key = getStoredKey();
-      if (!key) {
-        document.getElementById('key-drawer').classList.add('open');
-        showError("Please enter your Gemini or OpenAI API key above to evaluate with AI.");
-        return;
-      }
-
       const btn = document.getElementById('score-btn');
       btn.disabled = true;
       btn.innerHTML = 'Evaluating with AI<span class="loading-dot">...</span>';
 
       try {
-        let result;
-        if (key.startsWith('sk-')) {
-          result = await evaluateWithOpenAI(key, input);
-        } else {
-          result = await evaluateWithGemini(key, input);
+        const response = await fetch('/api/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ insight: input })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Evaluation failed.');
         }
-        renderResults(result);
+
+        renderResults(data);
       } catch (err) {
         console.error(err);
-        showError("Evaluation error: " + err.message);
+        showError(err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = 'Score it';
@@ -777,8 +512,6 @@ Respond with ONLY valid JSON with this exact schema:
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Init
-    updateKeyUI();
     document.getElementById('insight-input').addEventListener('keydown', function(e) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') scoreInsight();
     });
