@@ -22,16 +22,16 @@ FEEDBACK & TONE:
 - "feedback_items": 1 or 2 specific gaps to fix.
 
 GOLD-STANDARD REWRITE FORMULA ("sharpened_rewrite"):
-Do NOT write robotic summaries. A real insight connects the human friction to a concrete strategic consequence in a natural, fluid sentence:
-"[Specific behavior] because [underlying human friction or belief]—shifting our focus toward [concrete new mandate], rather than [the obvious default reaction]."
+Do NOT write robotic summaries or dry bullet points. Write ONE fluid, compelling product insight connecting the human tension to a concrete strategic shift:
+"[Specific behavior] because [underlying human tension or friction]—shifting our focus toward [concrete new action/mandate], rather than [the obvious lazy assumption]."
 
-Benchmark Example:
-"Users abandon the form because they are being asked to share sensitive information before they understand who will see it—shifting our focus toward building trust upfront, rather than simply shortening the form."
+Benchmark:
+"Users abandon the form because they are being asked to share sensitive information before they understand who will see it—shifting our response toward building trust upfront, rather than simply shortening the form."
 
 Ensure the rewrite:
-1. Identifies the specific human tension (not just surface actions).
-2. Finishes with the clear actionable consequence it births for the team.
-3. Reads like a thoughtful product thinker, not AI corporate fluff.
+- Unpacks the human friction (e.g. decision fatigue, fear of making mistakes, loss of agency).
+- Ends with the clear contrast: "—shifting our focus toward [X], rather than [Y]."
+- Sounds like a real human product thinker, sharp and actionable.
 
 OUTPUT FORMAT (Valid JSON only):
 {
