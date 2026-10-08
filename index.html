@@ -321,7 +321,6 @@
   <header>
     <h1>Insight Scorer</h1>
     <p>Paste your insight below. Evaluated against the team framework. 80 or above is a pass.</p>
-    <div class="framework-pill">The What (25) &rarr; The Why (35) &rarr; Actionable Consequence (40)</div>
   </header>
 
   <div class="divider"></div>
@@ -335,7 +334,6 @@
 
     <div class="button-group">
       <button id="score-btn" onclick="scoreInsight()">Score it</button>
-      <button class="example-btn" onclick="loadExample()">Load Faruq's example</button>
     </div>
 
     <div class="error-banner" id="error-banner"></div>
@@ -387,11 +385,6 @@
   </main>
 
   <script>
-    function loadExample() {
-      document.getElementById('insight-input').value = 
-        "Users abandon the form because they're being asked to share sensitive information before they understand who will see it—shifting our mandate toward establishing trust upfront rather than simply shortening the form.";
-    }
-
     function showError(msg) {
       const err = document.getElementById('error-banner');
       err.textContent = msg;
